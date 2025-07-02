@@ -18,7 +18,7 @@ jobs:
        id-token: write
        contents: read
     env:
-      NEXT_PUBLIC_API_URL: "https://din-backend.azurewebsites.net/api/"
+      NEXT_PUBLIC_API_URL: "https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api"
     steps:
       - uses: actions/checkout@v3
         with:
