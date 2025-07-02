@@ -1,7 +1,8 @@
 import axios from 'axios'
 
+
 const api = axios.create({
-    baseURL: 'https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api',
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
         'Content-Type': 'application'
     },

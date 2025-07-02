@@ -16,8 +16,9 @@ export function middleware(request: NextRequest) {
     }
 
     // Begränsa admin-sidor om rollen inte stämmer
-    if (pathname.startsWith("/dashboard") && role !== "Admin") {
-        console.log("test");
+    // Lägg till dem rollerna som skall ha behörighet
+    const allowRoles = ["Developer", "Admin"];
+    if (pathname.startsWith("/dashboard") && (!role || !allowRoles.includes(role))) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
