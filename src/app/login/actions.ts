@@ -17,7 +17,7 @@ export async function loginUser(formData: FormData): Promise<LoginResult> {
 
     try {
         const response = await axios.post(
-            "https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api",
+            "https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api/Auth",
             //`${process.env.NEXT_PUBLIC_API_URL}Auth`,
             { email, password }, {httpsAgent}
         );
