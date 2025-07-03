@@ -8,7 +8,7 @@ import type { LoginResult } from "@/types/loginResult";
 export async function loginUser(formData: FormData): Promise<LoginResult> {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    console.log("URL:", process.env.NEXT_PUBLIC_API_URL);
+    console.log("URL:", process.env.API_URL);
 
     // Denna används för att jag skall kunna köra den utan ett självstängande certifikat
     const httpsAgent = new https.Agent({
@@ -17,8 +17,8 @@ export async function loginUser(formData: FormData): Promise<LoginResult> {
 
     try {
         const response = await axios.post(
-            //"https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api/Auth",
-            `${process.env.API_URL}Auth`,
+            "https://sabomscleaning-dpegfqarf4dxavcc.swedencentral-01.azurewebsites.net/api/Auth",
+            //`${process.env.API_URL}Auth`,
             { email, password }, {httpsAgent}
         );
 
