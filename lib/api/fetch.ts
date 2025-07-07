@@ -9,8 +9,11 @@ export async function fetchApi<T>(
 ): Promise<T> {
     const cookieHeader = (await cookies()).toString();
 
+    const fullUrl = `${baseUrl}${endpoint}`;
+    console.log("Anropar API:", fullUrl);
+
     const res = await fetch(`${baseUrl}${endpoint}`, {
-        method: 'GET',
+        method: options.method || "GET",
         ...options,
         headers: {
             "Content-Type": "application/json",
