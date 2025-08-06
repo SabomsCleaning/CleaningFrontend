@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import LogoutButton from "./logoutButton";
+import Navbar from "@/components/Navbar";
 
 interface JwtPayload {
   Role?: string;
@@ -33,6 +34,7 @@ export default async function UserInfo() {
             Din roll: <strong>{role}</strong> inom <strong>{department}</strong>
           </p>
         </div>
+        <Navbar/>
         <LogoutButton />
       </div>
     );
