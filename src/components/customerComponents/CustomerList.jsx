@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 
-const CustomerList = () => {
+const CustomerList = ({setCustomer, updateFlag}) => {
     const [customers, setCustomers] = useState([]);
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const getCustomers = async () => {
         try {
-            const response = await fetch("https://localhost:7276/api/Customer");
+            const response = await fetch(`${baseUrl}/Customer`);
             const result = await response.json();
             setCustomers(result);
-            console.log(result);
         } catch (error) {
             console.error("Det blev fel: ", error);
         }
@@ -20,7 +20,7 @@ const CustomerList = () => {
         const id = data.id
         console.log(id)
         try {
-            const response = await fetch(`https://localhost:7276/api/Customer/${id}`, {
+            const response = await fetch(`${baseUrl}/Customer/${id}`, {
                 method: "DELETE"
             })
             getCustomers()
@@ -29,16 +29,20 @@ const CustomerList = () => {
         }
     };
 
+    const editCustomer = (customer) => {
+        setCustomer(customer)
+    }
+
     useEffect(() => {
         getCustomers();
-    }, []);
+    }, [updateFlag]);
     return (
-        <div>
-            <ul>
+        <div className="w-1/3 max-h-[400px] overflow-y-auto border p-1 rounded-xl">
+            <ul >
                 {customers.map((customer) => (
                     <div
                         key={customer.id}
-                        className="border m-1 p-2 rounded-xl w-1/3 flex justify-between">
+                        className="border m-1 p-2 rounded-xl flex justify-between">
                         <div className="flex flex-col">
                             <p>Kund nummer: {customer.customerNumber}</p>
                             <p>
@@ -48,7 +52,7 @@ const CustomerList = () => {
                             <p>{customer.customerAddressLine}</p>
                         </div>
                         <div className="grid gap-1">
-                            <button className="border rounded-xl p-1">
+                            <button className="border rounded-xl p-1" onClick={() => editCustomer(customer)}>
                                 Redigera
                             </button>
                             <button

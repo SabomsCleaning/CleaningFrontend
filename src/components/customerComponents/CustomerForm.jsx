@@ -1,19 +1,19 @@
 "use client";
-import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const CustomerForm = () => {
+const CustomerForm = ({ customer,setCustomer, setUpdateFlag }) => {
     const { register, handleSubmit, reset } = useForm();
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    const getCustomer = async () => {
-        const response = await fetch("https://localhost:7276/api/Customer");
-        const result = await response.json();
-        console.log(result);
-    };
+    useEffect(() => {
+        if (customer) {
+            reset(customer);
+        }
+    }, [customer, reset]);
 
     const onSubmit = async (data) => {
-        console.log(data);
-        const response = await fetch("https://localhost:7276/api/Customer", {
+        const response = await fetch(`${baseUrl}/Customer`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -23,13 +23,27 @@ const CustomerForm = () => {
         });
 
         const result = await response.json();
-        console.log(result);
+        setUpdateFlag((prev) => !prev);
+    };
+
+    const emptyForm = () => {
+        const emptyCustomer = {
+            customerId: "",
+            customerNumber: "",
+            customerFirstName: "",
+            customerLastName: "",
+            customerEmail: "",
+            customerPhoneNumber: "",
+            customerAddressLine: "",
+            customerCity: "",
+            customerPostalCode: "",
+        };
+        reset(emptyCustomer);
+        setCustomer(null);
     };
     return (
-        <div>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col w-1/2">
+        <div className="w-1/2">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
                 <input
                     className="input-glow"
                     type="text"
@@ -39,19 +53,19 @@ const CustomerForm = () => {
                 <input
                     className="input-glow"
                     type="text"
-                    {...register("CustomerLastName")}
+                    {...register("customerLastName")}
                     placeholder="Efternamn"
                 />
                 <input
                     className="input-glow"
                     type="text"
-                    {...register("CustomerEmail")}
+                    {...register("customerEmail")}
                     placeholder="Email"
                 />
                 <input
                     className="input-glow"
                     type="text"
-                    {...register("CustomerPhoneNumber")}
+                    {...register("customerPhoneNumber")}
                     placeholder="Telefon nummer"
                 />
                 <input
@@ -73,14 +87,16 @@ const CustomerForm = () => {
                     placeholder="Stad"
                 />
                 <button type="submit" className="border-1 rounded-xl p-2 m-1">
-                    Spara
+                    {customer?.id ? "Uppdatera" : "Spara"}
                 </button>
-            </form>
             <button
-                onClick={() => getCustomer()}
-                className="border-1 p-2 m-1 rounded-xl">
-                hämta lista
+            type="button"
+                onClick={() => {
+                    emptyForm();
+                }}>
+                Töm formulär
             </button>
+            </form>
         </div>
     );
 };
