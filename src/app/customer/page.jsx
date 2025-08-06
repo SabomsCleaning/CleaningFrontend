@@ -1,15 +1,14 @@
-
-import UserInfo from "@/components/userInfo";
+'use client'
 import CustomerForm from "@/components/customerComponents/CustomerForm";
+import CustomerList from "@/components/customerComponents/CustomerList";
 
 const CustomerPage = () => {
-  return (
-    <div>
-    <UserInfo/>
-    <CustomerForm/>
-    <div>CustomerPage</div>
-    </div>
-  )
-}
+    return (
+        <div>
+            <CustomerForm />
+            <CustomerList />
+        </div>
+    );
+};
 
-export default CustomerPage
+export default CustomerPage;
