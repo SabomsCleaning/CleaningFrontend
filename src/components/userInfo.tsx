@@ -15,7 +15,7 @@ export default async function UserInfo() {
   const token = (await cookieStore).get("token")?.value;
 
   if (!token) {
-    return <p>Ingen token hittades</p>;
+    return;
   }
 
   try {
