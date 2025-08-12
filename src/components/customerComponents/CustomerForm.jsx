@@ -2,8 +2,9 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const CustomerForm = ({ customer,setCustomer, setUpdateFlag }) => {
-    const { register, handleSubmit, reset } = useForm();
+const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
+    const { register, handleSubmit, reset, watch } = useForm();
+    const invoiceSameAsVisit = watch("InvoiceSameAsVisit", false);
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
@@ -13,6 +14,7 @@ const CustomerForm = ({ customer,setCustomer, setUpdateFlag }) => {
     }, [customer, reset]);
 
     const onSubmit = async (data) => {
+        console.log(data);
         const response = await fetch(`${baseUrl}/Customer`, {
             method: "POST",
             headers: {
@@ -23,79 +25,138 @@ const CustomerForm = ({ customer,setCustomer, setUpdateFlag }) => {
         });
 
         const result = await response.json();
+        // just for update in customerList
+        emptyForm()
         setUpdateFlag((prev) => !prev);
     };
 
     const emptyForm = () => {
+        console.log("töm formulär")
         const emptyCustomer = {
-            customerId: "",
-            customerNumber: "",
-            customerFirstName: "",
-            customerLastName: "",
-            customerEmail: "",
-            customerPhoneNumber: "",
-            customerAddressLine: "",
-            customerCity: "",
-            customerPostalCode: "",
+            id: "",
+            number: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            visitAddressLine: "",
+            visitCity: "",
+            visitPostalCode: "",
+            invoiceAddressLine: "",
+            invoiceCity: "",
+            invoicePostalCode: "",
+            description: "",
         };
         reset(emptyCustomer);
         setCustomer(null);
     };
+
     return (
         <div className="w-1/2">
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+                <div className="flex">
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("firstName")}
+                        placeholder="Förnamn"
+                    />
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("lastName")}
+                        placeholder="Efternamn"
+                    />
+                </div>
+                <div className="flex">
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("email")}
+                        placeholder="Email"
+                    />
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("phoneNumber")}
+                        placeholder="Telefon nummer"
+                    />
+                </div>
                 <input
-                    className="input-glow"
+                    className="input-glow w-auto"
                     type="text"
-                    {...register("customerFirstName")}
-                    placeholder="Förnamn"
-                />
-                <input
-                    className="input-glow"
-                    type="text"
-                    {...register("customerLastName")}
-                    placeholder="Efternamn"
-                />
-                <input
-                    className="input-glow"
-                    type="text"
-                    {...register("customerEmail")}
-                    placeholder="Email"
-                />
-                <input
-                    className="input-glow"
-                    type="text"
-                    {...register("customerPhoneNumber")}
-                    placeholder="Telefon nummer"
-                />
-                <input
-                    className="input-glow"
-                    type="text"
-                    {...register("customerAddressLine")}
+                    {...register("visitAddressLine")}
                     placeholder="Address"
                 />
-                <input
+                <div className="flex">
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("visitPostalCode")}
+                        placeholder="Postnummer"
+                    />
+                    <input
+                        className="input-glow w-full"
+                        type="text"
+                        {...register("visitCity")}
+                        placeholder="Stad"
+                    />
+                </div>
+                <textarea
                     className="input-glow"
-                    type="text"
-                    {...register("customerPostalCode")}
-                    placeholder="Postnummer"
+                    placeholder="Övrig info"
+                    {...register("description", {})}
                 />
-                <input
-                    className="input-glow"
-                    type="text"
-                    {...register("customerCity")}
-                    placeholder="Stad"
-                />
+                <label>
+                    <input
+                        type="checkbox"
+                        {...register("invoiceSameAsVisit")}
+                        className="m-1 gap-2"
+                    />
+                    FakturaAddress samma som besöksadress
+                </label>
+                <label>
+                    <input
+                        type="checkbox"
+                        {...register("addVisitAsServiceLocation")}
+                        className="m-1 gap-2"
+                    />
+                    Tjänsteplats samma som besöksadress
+                </label>
+                {!invoiceSameAsVisit && (
+                    <div>
+                        <input
+                            type="text"
+                            {...register("invoiceAddressLine")}
+                            placeholder="Faktura address"
+                            className="input-glow"
+                        />
+                        <div className="flex">
+                            <input
+                                type="text"
+                                {...register("invoiceCity")}
+                                placeholder="Stad"
+                                className="input-glow"
+                            />
+                            <input
+                                type="text"
+                                {...register("invoicePostalCode")}
+                                placeholder="Postkod"
+                                className="input-glow"
+                            />
+                        </div>
+                    </div>
+                )}
                 <button type="submit" className="border-1 rounded-xl p-2 m-1">
                     {customer?.id ? "Uppdatera" : "Spara"}
                 </button>
-            <button
-            type="button"
-                onClick={() => {
-                    emptyForm();
-                }}>
-                Töm formulär
-            </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        emptyForm();
+                    }}>
+                    Töm formulär
+                </button>
             </form>
         </div>
     );

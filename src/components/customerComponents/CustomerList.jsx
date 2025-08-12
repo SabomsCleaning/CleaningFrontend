@@ -11,6 +11,7 @@ const CustomerList = ({setCustomer, updateFlag}) => {
             const response = await fetch(`${baseUrl}/Customer`);
             const result = await response.json();
             setCustomers(result);
+            console.log(result)
         } catch (error) {
             console.error("Det blev fel: ", error);
         }
@@ -24,12 +25,14 @@ const CustomerList = ({setCustomer, updateFlag}) => {
                 method: "DELETE"
             })
             getCustomers()
+            setCustomer("")
         } catch (error) {
             console.error(error);
         }
     };
 
     const editCustomer = (customer) => {
+        console.log(customer)
         setCustomer(customer)
     }
 
@@ -46,10 +49,10 @@ const CustomerList = ({setCustomer, updateFlag}) => {
                         <div className="flex flex-col">
                             <p>Kund nummer: {customer.customerNumber}</p>
                             <p>
-                                {customer.customerFirstName}{" "}
-                                {customer.customerLastName}
+                                {customer.firstName}{" "}
+                                {customer.lastName}
                             </p>
-                            <p>{customer.customerAddressLine}</p>
+                            <p>{customer.visitAddressLine}</p>
                         </div>
                         <div className="grid gap-1">
                             <button className="border rounded-xl p-1" onClick={() => editCustomer(customer)}>
