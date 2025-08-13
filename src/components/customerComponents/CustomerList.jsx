@@ -25,7 +25,7 @@ const CustomerList = ({setCustomer, updateFlag}) => {
                 method: "DELETE"
             })
             getCustomers()
-            setCustomer("")
+            setCustomer(null)
         } catch (error) {
             console.error(error);
         }
