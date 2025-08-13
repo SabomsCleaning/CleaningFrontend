@@ -10,7 +10,7 @@ const CustomerPage = () => {
 
     return (
         <div className="flex">
-            <CustomerForm customer={customer} setCustomer={setCustomer} setUpdateFlag={setUpdateFlag}/>
+            <CustomerForm key={customer?.id ?? 'new'} customer={customer} setCustomer={setCustomer} setUpdateFlag={setUpdateFlag}/>
             <CustomerList setCustomer={setCustomer} updateFlag={updateFlag}/>
         </div>
     );
