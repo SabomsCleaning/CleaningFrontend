@@ -9,9 +9,12 @@ const CustomerPage = () => {
     const [updateFlag, setUpdateFlag] = useState(false)
 
     return (
-        <div className="flex">
+        <div className="flex-col sm:flex sm:flex-row">
             <CustomerForm key={customer?.id ?? 'new'} customer={customer} setCustomer={setCustomer} setUpdateFlag={setUpdateFlag}/>
+            <div className="hidden sm:block">
+
             <CustomerList setCustomer={setCustomer} updateFlag={updateFlag}/>
+            </div>
         </div>
     );
 };

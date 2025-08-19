@@ -40,12 +40,12 @@ const CustomerList = ({setCustomer, updateFlag}) => {
         getCustomers();
     }, [updateFlag]);
     return (
-        <div className="w-1/3 max-h-[400px] overflow-y-auto border p-1 rounded-xl">
+        <div className="max-h-[400px] overflow-y-auto rounded-xl">
             <ul >
                 {customers.map((customer) => (
                     <div
                         key={customer.id}
-                        className="border m-1 p-2 rounded-xl flex justify-between">
+                        className="border m-1 p-2 rounded-xl flex justify-between gap-2">
                         <div className="flex flex-col">
                             <p>Kund nummer: {customer.customerNumber}</p>
                             <p>
