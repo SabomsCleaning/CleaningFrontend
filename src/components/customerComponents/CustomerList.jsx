@@ -39,6 +39,7 @@ const CustomerList = ({setCustomer, updateFlag}) => {
     useEffect(() => {
         getCustomers();
     }, [updateFlag]);
+    
     return (
         <div className="max-h-[400px] overflow-y-auto rounded-xl">
             <ul >

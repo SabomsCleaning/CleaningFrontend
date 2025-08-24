@@ -27,7 +27,7 @@ body {
 
 @layer components {
     .input-glow {
-        @apply border border-purple-300 p-2 m-1 rounded-xl outline-none focus:outline-none
+        @apply border border-purple-300 bg-white p-2 m-1 rounded-xl outline-none focus:outline-none
         focus:ring-purple-500 focus:ring-1 focus:shadow-lg transition-shadow duration-200;
     }
 }
