@@ -35,8 +35,10 @@ export default async function UserInfo() {
                         <strong>{department}</strong>
                     </p>
                 </div>
+                <div className="flex justify-between items-center">
                 <Navbar />
                 <LogoutButton />
+                </div>
             </div>
         );
     } catch (err) {
