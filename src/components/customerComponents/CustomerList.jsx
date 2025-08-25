@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const CustomerList = ({setCustomer, updateFlag}) => {
+const CustomerList = ({ setCustomer, updateFlag }) => {
     const [customers, setCustomers] = useState([]);
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,38 +12,37 @@ const CustomerList = ({setCustomer, updateFlag}) => {
             const response = await fetch(`${baseUrl}/Customer`);
             const result = await response.json();
             setCustomers(result);
-            console.log(result)
         } catch (error) {
             console.error("Det blev fel: ", error);
         }
     };
 
     const removeCustomer = async (data) => {
-        const id = data.id
-        console.log(id)
+        const id = data.id;
+        console.log(id);
         try {
             const response = await fetch(`${baseUrl}/Customer/${id}`, {
-                method: "DELETE"
-            })
-            getCustomers()
-            setCustomer(null)
+                method: "DELETE",
+            });
+            getCustomers();
+            setCustomer(null);
         } catch (error) {
             console.error(error);
         }
     };
 
     const editCustomer = (customer) => {
-        console.log(customer)
-        setCustomer(customer)
-    }
+        console.log(customer);
+        setCustomer(customer);
+    };
 
     useEffect(() => {
         getCustomers();
     }, [updateFlag]);
-    
+
     return (
         <div className="max-h-[400px] overflow-y-auto rounded-xl">
-            <ul >
+            <ul>
                 {customers.map((customer) => (
                     <div
                         key={customer.id}
@@ -50,13 +50,14 @@ const CustomerList = ({setCustomer, updateFlag}) => {
                         <div className="flex flex-col">
                             <p>Kund nummer: {customer.customerNumber}</p>
                             <p>
-                                {customer.firstName}{" "}
-                                {customer.lastName}
+                                {customer.firstName} {customer.lastName}
                             </p>
                             <p>{customer.visitAddressLine}</p>
                         </div>
                         <div className="grid gap-1">
-                            <button className="border rounded-xl p-1" onClick={() => editCustomer(customer)}>
+                            <button
+                                className="border rounded-xl p-1"
+                                onClick={() => editCustomer(customer)}>
                                 Redigera
                             </button>
                             <button
@@ -64,6 +65,10 @@ const CustomerList = ({setCustomer, updateFlag}) => {
                                 onClick={() => removeCustomer(customer)}>
                                 Radera
                             </button>
+                            <Link
+                                href={`/customer/${customer.id}/service-locations`}>
+                                <button>Service Locations</button>
+                            </Link>
                         </div>
                     </div>
                 ))}
