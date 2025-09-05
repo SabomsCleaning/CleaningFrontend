@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import ServiceLocationForm from "../forms/ServiceLocationForm";
 
 const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
   const emptyCustomer = {
@@ -164,28 +165,7 @@ const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
         </div>
       )}
       {!addVisitAsServiceLocation && (
-        <div className="flex flex-col bg-green-200">
-          <input
-            className="input-glow"
-            type="text"
-            {...register("serviceAddressLine")}
-            placeholder="Service-address"
-          />
-          <div className="flex">
-            <input
-              className="input-glow w-full"
-              type="text"
-              {...register("serviceCity")}
-              placeholder="Stad"
-            />
-            <input
-              className="input-glow w-full"
-              type="text"
-              {...register("servicePostalCode")}
-              placeholder="Postnummer"
-            />
-          </div>
-        </div>
+        <ServiceLocationForm/>
       )}
       <label>
         <input
