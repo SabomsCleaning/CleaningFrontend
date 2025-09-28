@@ -5,15 +5,32 @@ import React, { useEffect, useState } from "react";
 
 const CustomerList = ({ setCustomer, updateFlag }) => {
     const [customers, setCustomers] = useState([]);
+    const [message, setMessage]= useState("");
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const getCustomers = async () => {
         try {
             const response = await fetch(`${baseUrl}/Customer`);
+            if (!response.ok){
+                const errorText = await response.text();
+                setCustomers([])
+                setMessage(errorText || "Kunde inte hämta kunder just nu");
+                return;
+            }
+            
             const result = await response.json();
-            setCustomers(result);
+
+            if (Array.isArray(result) && result.length > 0) {
+                setCustomers(result);
+                setMessage("");
+            } else {
+                setCustomers([]);
+                setMessage("Det finns inga kunder i databasen");
+            }
         } catch (error) {
             console.error("Det blev fel: ", error);
+            setCustomers([]);
+            setMessage("Kunde inte hämta kunder just nu");
         }
     };
 
@@ -42,11 +59,16 @@ const CustomerList = ({ setCustomer, updateFlag }) => {
 
     return (
         <div className="max-h-[400px] overflow-y-auto rounded-xl">
-            <ul>
+            {message ? (
+                <p>{message}</p>
+            ) : (
+
+                
+                <ul>
                 {customers.map((customer) => (
                     <div
-                        key={customer.id}
-                        className="border m-1 p-2 rounded-xl flex justify-between gap-2">
+                    key={customer.id}
+                    className="border m-1 p-2 rounded-xl flex justify-between gap-2">
                         <div className="flex flex-col">
                             <p>Kund nummer: {customer.customerNumber}</p>
                             <p>
@@ -73,6 +95,7 @@ const CustomerList = ({ setCustomer, updateFlag }) => {
                     </div>
                 ))}
             </ul>
+            )}
         </div>
     );
 };
