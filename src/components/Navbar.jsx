@@ -7,6 +7,7 @@ const Navbar = () => {
         <Link className='text-purple-800' href="/customer">Customer</Link>
         <Link className='text-purple-800' href="/dashboard">Dashboard</Link>
         <Link className='text-purple-800' href="/servicelocation">Service location</Link>
+        <Link className='text-purple-800' href="/servicetype">Service type</Link>
     </div>
   )
 }
