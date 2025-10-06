@@ -1,9 +1,12 @@
 'use client'
-import React from "react";
+
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { createServiceType } from "@/server/serviceTypeApi";
 
 const ServiceTypeForm = () => {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
+    const router = useRouter();
 
     const pricingModels = [
         { value: 0, label: "Per timme" },
@@ -18,7 +21,14 @@ const ServiceTypeForm = () => {
             Description: data.description,
             BasePrice: Number(data.basePrice),
             MinimumPrice: Number(data.minimumPrice),
-            PricingModels: Number(data.priceingModel)
+            PricingModels: Number(data.priceingModels)
+        }
+        try {
+            //await createServiceType(payload)
+            //router.refresh();
+            //reset();
+        } catch {
+            console.error("Fel vid skapande: ", error)
         }
         console.log(payload);
     }
@@ -35,19 +45,19 @@ const ServiceTypeForm = () => {
                 <input
                     type="text"
                     className="input-glow"
-                    placeholder="description"
+                    placeholder="Description"
                     {...register("description")}
                 />
                 <input
                     type="number"
                     className="input-glow"
-                    placeholder="baseprice"
+                    placeholder="Baseprice"
                     {...register("basePrice")}
                 />
                 <input
                     type="number"
                     className="input-glow"
-                    placeholder="minimumprice"
+                    placeholder="Minimumprice"
                     {...register("minimumPrice")}
                 />
                 <select className="input-glow" {...register('pricingModels')} defaultValue={0}>
@@ -55,7 +65,7 @@ const ServiceTypeForm = () => {
                         <option key={model.value} value={model.value}>{model.label}</option>
                     ))}
                 </select>
-                <input type="submit" className="input-glow" onSubmit={onSubmit} />
+                <input type="submit" className="input-glow"/>
             </form>
         </div>
     );

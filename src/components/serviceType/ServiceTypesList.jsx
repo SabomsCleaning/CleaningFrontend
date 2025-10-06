@@ -1,14 +1,15 @@
-'use client'
-
 import React from 'react'
+import DeleteServiceTypeButton from './DeleteServiceTypeButton'
 
 const ServiceTypesList = ({serviceTypes}) => {
-    console.log(serviceTypes)
   return (
     <div>
-        {serviceTypes.map((s) => 
-        <li key={s.id}>{s.name}</li>
-        )}
+        {serviceTypes.map((s) => (
+            <ul key={s.id} className='bg-green-300 border-2 m-1'>
+                <li>{s.name}</li>
+                <DeleteServiceTypeButton id={s.id}/>
+            </ul>
+        ))}
     </div>
   )
 }
