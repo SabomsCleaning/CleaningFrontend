@@ -8,6 +8,7 @@ const Navbar = () => {
         <Link className='text-purple-800' href="/dashboard">Dashboard</Link>
         <Link className='text-purple-800' href="/servicelocation">Service location</Link>
         <Link className='text-purple-800' href="/servicetype">Service type</Link>
+        <Link className='text-purple-800' href="/booking">Booking</Link>
     </div>
   )
 }
