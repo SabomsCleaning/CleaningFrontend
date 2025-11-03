@@ -42,7 +42,7 @@ export default function Dashboard() {
     const sortedDates = Object.keys(grouped).sort((a,b) => new Date(a) - new Date(b));
 
     return (
-        <div className="p-4">
+        <div className="p-4 flex gap-1">
             {sortedDates.map((date) => (
                 <div key={date} className="mb-6 border rounded-lg p-3 shadow-sm bg-white">
                     <h2 className="font-bold text-lg mb-2">{date}</h2>
