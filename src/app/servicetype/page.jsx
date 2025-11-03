@@ -1,6 +1,6 @@
 import { getServiceTypes } from "@/server/serviceTypeApi";
-import ServiceTypesList from "@/components/ServiceType/ServiceTypesList";
-import ServiceTypeForm from "@/components/ServiceType/ServiceTypeForm";
+import ServiceTypesList from "@/components/serviceType/ServiceTypesList";
+import ServiceTypeForm from "@/components/serviceType/ServiceTypeForm";
 
 export default async function ServiceTypePage() {
     const serviceTypes = await getServiceTypes();
