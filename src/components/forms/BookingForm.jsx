@@ -80,6 +80,7 @@ const BookingForm = () => {
         } catch (err) {
             console.error("Fel vid skapande av bokning:", err);
             alert("Kunde inte skapa bokningen, försök igen.");
+            // Test
         }
     };
 
