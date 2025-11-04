@@ -52,7 +52,9 @@ const BookingForm = () => {
                 customerId: data.customerId,
                 serviceTypeId: Number(data.serviceTypeId),
                 serviceLocationId: data.serviceLocationId,
-                scheduleStartTime: new Date(data.bookingStartTime).toISOString(),
+                scheduleStartTime: new Date(
+                    data.bookingStartTime
+                ).toISOString(),
                 scheduleEndTime: new Date(data.bookingEndTime).toISOString(),
             };
 
@@ -68,18 +70,27 @@ const BookingForm = () => {
             });
 
             if (!response.ok) {
-                throw new Error(
-                    `Servern svarade med felkod ${response.status}`
-                );
+                let errorMessage = `Serverfel(${response.status})`;
+
+                try {
+                    const errorData = await response.json();
+                    if (errorData?.message) {
+                        errorMessage = errorData.message;
+                    } else if (typeof errorData === "string") {
+                        errorMessage = errorData
+                    }
+                } catch {
+
+                }
+                throw new Error(errorMessage);
             }
 
             const result = await response.json();
             console.log("Booking skapad:", result);
-
             alert("Bokningen är skapad!");
         } catch (err) {
             console.error("Fel vid skapande av bokning:", err);
-            alert("Kunde inte skapa bokningen, försök igen.");
+            alert(err.message || `Kunde inte skapa bokningen, försök igen.`);
             // Test
         }
     };
@@ -88,7 +99,9 @@ const BookingForm = () => {
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <select {...register("customerId", { required: true })}>
+                    <select
+                        {...register("customerId", { required: true })}
+                        defaultValue="">
                         <option value="" disabled hidden>
                             -- Välj en kund --
                         </option>
@@ -101,8 +114,15 @@ const BookingForm = () => {
                 </div>
                 <div>
                     <select
-                        {...register("serviceLocationId", { required: true })}>
-                        <option value="">
+                        {...register("serviceLocationId", { required: true })}
+                        defaultValue=""
+                        disabled={!selectedCustomerId}
+                        className={`${
+                            !selectedCustomerId
+                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                : "bg-white text-black"
+                        } rounded p-1`}>
+                        <option value="" disabled hidden>
                             -- Vänligen välj rätt address --
                         </option>
                         {serviceLocation.map((sl) => (
@@ -114,9 +134,8 @@ const BookingForm = () => {
                 </div>
                 <div>
                     <select
-                        {...register("serviceTypeId", {
-                            required: true,
-                        })}>
+                        {...register("serviceTypeId", { required: true })}
+                        defaultValue="">
                         <option value="" disabled hidden>
                             -- Välj en service --
                         </option>
@@ -132,15 +151,21 @@ const BookingForm = () => {
                     <input
                         type="datetime-local"
                         id="bookingTime"
-                        {...register("bookingStartTime", { required: true })}
+                        step="600"
+                        {...register("bookingStartTime", {
+                            required: true,
+                        })}
                     />
                 </div>
                 <div>
-                    <label htmlFor="bookingTime">Slut tiden datum </label>
+                    <label htmlFor="bookingEndTime">Slut tiden datum </label>
                     <input
                         type="datetime-local"
-                        id="bookingTime"
-                        {...register("bookingEndTime", { required: true })}
+                        id="bookingEndTime"
+                        step="600"
+                        {...register("bookingEndTime", {
+                            required: true,
+                        })}
                     />
                 </div>
 
