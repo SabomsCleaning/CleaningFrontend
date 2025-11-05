@@ -52,6 +52,7 @@ const BookingForm = () => {
                 customerId: data.customerId,
                 serviceTypeId: Number(data.serviceTypeId),
                 serviceLocationId: data.serviceLocationId,
+                comment: data.comment,
                 scheduleStartTime: new Date(
                     data.bookingStartTime
                 ).toISOString(),
@@ -168,6 +169,7 @@ const BookingForm = () => {
                         })}
                     />
                 </div>
+                <input type="text" {...register("comment")} className="border" placeholder="Comment" />
 
                 <button type="submit" className="border-1 p-2 rounded-xl">
                     Spara bokning
