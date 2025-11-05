@@ -101,10 +101,18 @@ export default function Dashboard() {
                                     <div className="mt-3 text-sm border-t pt-2 text-gray-700">
                                         {/* <p><strong>Boknings-ID:</strong> {b.id}</p> */}
                                         <p>
-                                            <strong>Skapad:</strong>{" "}
+                                            <strong>Skapad: </strong>{b.creator}
+                                            {" "}
                                             {new Date(
                                                 b.createdAt
-                                            ).toLocaleString("sv-SE")}
+                                            ).toLocaleString("sv-SE", {
+                                                year: "numeric",
+                                                month: "2-digit",
+                                                day: "2-digit",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                timeZone: "Europe/Stockholm"
+                                            })}
                                         </p>
                                         <p>
                                             <strong>Kund:</strong> {b.customer}
