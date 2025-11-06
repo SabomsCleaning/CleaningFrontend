@@ -17,6 +17,21 @@ export default function Dashboard() {
         getBookings();
     }, []);
 
+    useEffect(() => {
+        if (!bookings.length) return;
+
+        const hasMissingCleaners = bookings.some((b) => b.cleaners == 0);
+        const faviconPaht = hasMissingCleaners
+            ? "/icons/icons8-cleaning-50.png"
+            : "/icons/icons8-done-50.png";
+        const link =
+            document.querySelector("link[rel~='icon']") ||
+            document.querySelector("link");
+        link.rel = "icon";
+        link.href = faviconPaht;
+        document.head.appendChild(link);
+    }, [bookings]);
+
     function groupByDate(bookings) {
         const groups = {};
         bookings.forEach((b) => {
@@ -27,7 +42,7 @@ export default function Dashboard() {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
-                    timeZone: "Europe/Stockholm"
+                    timeZone: "Europe/Stockholm",
                 }
             );
             if (!groups[dateKey]) groups[dateKey] = [];
@@ -68,6 +83,30 @@ export default function Dashboard() {
                                 {/* Basinformation */}
                                 <div className="flex justify-between items-center">
                                     <div>
+                                        {b.cleaners == 0 ? (
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <img
+                                                    src="/icons/icons8-cleaning-50.png"
+                                                    alt="Ingen städare"
+                                                    className="w-5 h-5 opacity-100"
+                                                />
+                                                <span className="text-red-600 font-medium">
+                                                    Ingen städare
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <img
+                                                    src="/icons/icons8-cleaning-50.png"
+                                                    alt="Städare finns"
+                                                    className="w-5 h-5 opacity-60"
+                                                />
+                                                <span className="text-green-600 font-medium">
+                                                    Städare tilldelad
+                                                </span>
+                                            </div>
+                                        )}
+
                                         <p className="font-semibold">
                                             {b.bookingNumber} — {b.customer}
                                         </p>
@@ -79,7 +118,7 @@ export default function Dashboard() {
                                             ).toLocaleTimeString("sv-SE", {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
-                                                timeZone: "Europe/Stockholm"
+                                                timeZone: "Europe/Stockholm",
                                             })}
                                             {"  "}–{" "}
                                             {new Date(
@@ -87,7 +126,7 @@ export default function Dashboard() {
                                             ).toLocaleTimeString("sv-SE", {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
-                                                timeZone: "Europe/Stockholm"
+                                                timeZone: "Europe/Stockholm",
                                             })}
                                         </p>
                                     </div>
@@ -101,8 +140,8 @@ export default function Dashboard() {
                                     <div className="mt-3 text-sm border-t pt-2 text-gray-700">
                                         {/* <p><strong>Boknings-ID:</strong> {b.id}</p> */}
                                         <p>
-                                            <strong>Skapad: </strong>{b.creator}
-                                            {" "}
+                                            <strong>Skapad: </strong>
+                                            {b.creator}{" "}
                                             {new Date(
                                                 b.createdAt
                                             ).toLocaleString("sv-SE", {
@@ -111,7 +150,7 @@ export default function Dashboard() {
                                                 day: "2-digit",
                                                 hour: "2-digit",
                                                 minute: "2-digit",
-                                                timeZone: "Europe/Stockholm"
+                                                timeZone: "Europe/Stockholm",
                                             })}
                                         </p>
                                         <p>
