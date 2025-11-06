@@ -2,10 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { createBooking } from "@/server/actions/booking/createBooking";
 
 const BookingForm = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
-    const { register, handleSubmit, watch } = useForm();
+    const { register, watch } = useForm();
 
     const [customers, setCustomers] = useState([]);
     const [serviceType, setServiceType] = useState([]);
@@ -62,7 +63,7 @@ const BookingForm = () => {
             console.log("Skickar booking:", payload);
 
             // Gör POST-anropet
-            const response = await fetch(`${baseURL}/Booking`, {
+            const response = await fetchApi(`${baseURL}/Booking`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +99,7 @@ const BookingForm = () => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form action={createBooking}>
                 <div>
                     <select
                         {...register("customerId", { required: true })}
