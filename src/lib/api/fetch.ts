@@ -8,7 +8,8 @@ export async function fetchApi<T>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<T> {
-    const cookieHeader = (await cookies()).toString();
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
     const fullUrl = `${baseUrl}${endpoint}`;
     console.log("Anropar API:", fullUrl);
@@ -18,8 +19,8 @@ export async function fetchApi<T>(
         ...options,
         headers: {
             "Content-Type": "application/json",
-            ...(options?.headers || {}),
-            Cookie: cookieHeader,
+            ...(token && { Authorization: `Bearer ${token}` }),
+            ...(options.headers || {})
         },
         cache: "no-store",
     });
