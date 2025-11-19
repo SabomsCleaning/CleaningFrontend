@@ -1,184 +1,91 @@
 "use client";
-import { useEffect, useState } from "react";
 
-export default function Dashboard() {
-    const baseURL = process.env.NEXT_PUBLIC_API_URL;
+import { useState, useEffect } from "react";
+import { getBookings } from "@/server/actions/booking/getBookings";
+import DayColumn from "@/components/Dashboard/DayColumn";
+
+export default function DashboardPage() {
     const [bookings, setBookings] = useState([]);
-    const [expandedId, setExpandedId] = useState(null); // <- ny state
-
-    const getBookings = async () => {
-        const response = await fetch(`${baseURL}/Booking`);
-        const data = await response.json();
-        console.log(data.data);
-        setBookings(data.data);
-    };
+    const [weekOffSet, setWeekOffSet] = useState(0);
 
     useEffect(() => {
-        getBookings();
+        (async () => {
+            const data = await getBookings();
+            setBookings(data.data || []);
+        })();
     }, []);
 
-    useEffect(() => {
-        if (!bookings.length) return;
+    const days = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
 
-        const hasMissingCleaners = bookings.some((b) => b.cleaners == 0);
-        const faviconPaht = hasMissingCleaners
-            ? "/icons/icons8-cleaning-50.png"
-            : "/icons/icons8-done-50.png";
-        const link =
-            document.querySelector("link[rel~='icon']") ||
-            document.querySelector("link");
-        link.rel = "icon";
-        link.href = faviconPaht;
-        document.head.appendChild(link);
-    }, [bookings]);
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
 
-    function groupByDate(bookings) {
-        const groups = {};
-        bookings.forEach((b) => {
-            const dateKey = new Date(b.scheduleStartTime).toLocaleDateString(
-                "sv-SE",
-                {
-                    weekday: "short",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    timeZone: "Europe/Stockholm",
-                }
-            );
-            if (!groups[dateKey]) groups[dateKey] = [];
-            groups[dateKey].push(b);
-        });
-        return groups;
-    }
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diffToMonday + weekOffSet * 7);
+    monday.setHours(0, 0, 0, 0);
 
-    const grouped = groupByDate(bookings);
-    const sortedDates = Object.keys(grouped).sort(
-        (a, b) => new Date(a) - new Date(b)
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
+
+    const thisWeeksBookings = bookings.filter((b) => {
+        const start = new Date(b.scheduleStartTime);
+        return start >= monday && start <= sunday;
+    });
+
+    const date = new Date(monday);
+    const oneJan = new Date(date.getFullYear(), 0, 1);
+    const numberOfDays = Math.floor((date - oneJan) / (24 * 60 * 60 * 1000));
+    const currentWeekNumber = Math.ceil(
+        (numberOfDays + oneJan.getDay() + 1) / 7
     );
 
-    const toggleExpand = (id) => {
-        setExpandedId((prev) => (prev === id ? null : id));
-    };
+    console.log(numberOfDays);
 
     return (
-        <div className="p-4">
-            {sortedDates.map((date) => (
-                <div
-                    key={date}
-                    className="mb-6 border rounded-lg p-3 shadow-sm bg-white">
-                    <h2 className="font-bold text-lg mb-2">{date}</h2>
+        <div className="grid gap-2">
+            <div className="flex justify-around">
+                <button
+                    onClick={() => setWeekOffSet((prev) => prev - 1)}
+                    className="border p-2 rounded">
+                    {" "}
+                    ← Föregående
+                </button>
+                <h1>Vecko vy {currentWeekNumber}</h1>
+                <button
+                    onClick={() => setWeekOffSet((prev) => prev + 1)}
+                    className="border p-2 rounded">
+                    Nästa →
+                </button>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+                {days.map((day, index) => {
+                    const currentDay = new Date(monday);
+                    currentDay.setDate(monday.getDate() + index);
 
-                    {grouped[date].map((b) => {
-                        const isExpanded = expandedId === b.id;
-
-                        return (
-                            <div
-                                key={b.id}
-                                onClick={() => toggleExpand(b.id)}
-                                className={`border p-2 mb-2 rounded-md transition-all cursor-pointer ${
-                                    isExpanded
-                                        ? "bg-purple-50"
-                                        : "bg-gray-50 hover:bg-gray-100"
-                                }`}>
-                                {/* Basinformation */}
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        {b.cleaners == 0 ? (
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <img
-                                                    src="/icons/icons8-cleaning-50.png"
-                                                    alt="Ingen städare"
-                                                    className="w-5 h-5 opacity-100"
-                                                />
-                                                <span className="text-red-600 font-medium">
-                                                    Ingen städare
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <img
-                                                    src="/icons/icons8-cleaning-50.png"
-                                                    alt="Städare finns"
-                                                    className="w-5 h-5 opacity-60"
-                                                />
-                                                <span className="text-green-600 font-medium">
-                                                    Städare tilldelad
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <p className="font-semibold">
-                                            {b.bookingNumber} — {b.customer}
-                                        </p>
-                                        <p>{b.service.name}</p>
-                                        <p>
-                                            Start:{" "}
-                                            {new Date(
-                                                b.scheduleStartTime
-                                            ).toLocaleTimeString("sv-SE", {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                                timeZone: "Europe/Stockholm",
-                                            })}
-                                            {"  "}–{" "}
-                                            {new Date(
-                                                b.scheduleEndTime
-                                            ).toLocaleTimeString("sv-SE", {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                                timeZone: "Europe/Stockholm",
-                                            })}
-                                        </p>
-                                    </div>
-                                    <span className="text-xl">
-                                        {isExpanded ? "▲" : "▼"}
-                                    </span>
-                                </div>
-
-                                {/* Expandera mer info */}
-                                {isExpanded && (
-                                    <div className="mt-3 text-sm border-t pt-2 text-gray-700">
-                                        {/* <p><strong>Boknings-ID:</strong> {b.id}</p> */}
-                                        <p>
-                                            <strong>Skapad: </strong>
-                                            {b.creator}{" "}
-                                            {new Date(
-                                                b.createdAt
-                                            ).toLocaleString("sv-SE", {
-                                                year: "numeric",
-                                                month: "2-digit",
-                                                day: "2-digit",
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                                timeZone: "Europe/Stockholm",
-                                            })}
-                                        </p>
-                                        <p>
-                                            <strong>Kund:</strong> {b.customer}
-                                        </p>
-                                        <p>
-                                            <strong>Adress:</strong>{" "}
-                                            {b.serviceLocation}
-                                        </p>
-                                        <p>
-                                            <strong>Service:</strong>{" "}
-                                            {b.service.name}
-                                        </p>
-                                        <p>
-                                            <strong>Städare:</strong>{" "}
-                                            {b.cleaners[0]}
-                                        </p>
-                                        <p>
-                                            <strong>Kommentar:</strong>{" "}
-                                            {b.comment || "Ingen kommentar"}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
+                    const dayBookings = thisWeeksBookings
+                        .filter(
+                            (b) =>
+                                new Date(b.scheduleStartTime).getDay() ===
+                                index + 1
+                        )
+                        .sort(
+                            (a, b) =>
+                                new Date(a.scheduleStartTime) -
+                                new Date(b.scheduleStartTime)
                         );
-                    })}
-                </div>
-            ))}
+
+                    return (
+                        <DayColumn
+                            key={day}
+                            day={day}
+                            date={currentDay}
+                            bookings={dayBookings}
+                        />
+                    );
+                })}
+            </div>
         </div>
     );
 }

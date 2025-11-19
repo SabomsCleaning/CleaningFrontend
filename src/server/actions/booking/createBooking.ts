@@ -11,6 +11,7 @@ export async function createBooking(formData: FormData) {
         scheduleEndTime: new Date(formData.get("bookingEndTime") as string).toISOString(),
     };
 
+    console.log("detta är i createBooking", payload)
     try {
         const result = await fetchApi("/Booking", { 
             method: "POST", 
