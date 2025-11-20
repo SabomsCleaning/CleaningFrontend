@@ -56,7 +56,7 @@ export default function Modal({ booking, onClose }) {
 
                 <p className="text-sm text-gray-600 mb-1">
                     <span className="font-semibold">Adress:</span>{" "}
-                    {booking.addressLine || "Ingen adress"}
+                    {booking.serviceLocation || "Ingen adress"}
                 </p>
 
                 <p className="text-sm text-gray-600 mb-3">

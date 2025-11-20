@@ -9,6 +9,7 @@ export async function createBooking(formData: FormData) {
         serviceLocationId: formData.get("serviceLocationId"),
         scheduleStartTime: new Date(formData.get("bookingStartTime") as string).toISOString(),
         scheduleEndTime: new Date(formData.get("bookingEndTime") as string).toISOString(),
+        comment: formData.get("comment")
     };
 
     console.log("detta är i createBooking", payload)
