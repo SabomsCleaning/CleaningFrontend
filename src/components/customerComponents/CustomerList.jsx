@@ -62,8 +62,6 @@ const CustomerList = ({ setCustomer, updateFlag }) => {
             {message ? (
                 <p>{message}</p>
             ) : (
-
-                
                 <ul>
                 {customers.map((customer) => (
                     <div
@@ -87,10 +85,6 @@ const CustomerList = ({ setCustomer, updateFlag }) => {
                                 onClick={() => removeCustomer(customer)}>
                                 Radera
                             </button>
-                            <Link
-                                href={`/customer/${customer.id}/service-locations`}>
-                                <button>Service Locations</button>
-                            </Link>
                         </div>
                     </div>
                 ))}

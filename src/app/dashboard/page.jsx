@@ -1,61 +1,91 @@
 "use client";
-import { getBookingsAction } from "@/server/actions/booking/getBookingsAction";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { getBookings } from "@/server/actions/booking/getBookings";
+import DayColumn from "@/components/Dashboard/DayColumn";
 
 export default function DashboardPage() {
-  const days = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
-  const [currentWeek, setCurrentWeek] = useState(0);
+    const [bookings, setBookings] = useState([]);
+    const [weekOffSet, setWeekOffSet] = useState(0);
 
-  function increaseWeek() {
-    setCurrentWeek((prev) => prev + 1);
-  }
+    useEffect(() => {
+        (async () => {
+            const data = await getBookings();
+            setBookings(data.data || []);
+        })();
+    }, []);
 
-  function decreaseWeek() {
-    setCurrentWeek((prev) => prev - 1);
-  }
+    const days = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
 
-  const today = new Date();
-  const dayNumber = today.getDay();
-  const diffToMonday = dayNumber === 0 ? -6 : 1 - dayNumber;
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
 
-  const monday = new Date(today);
-  monday.setDate(today.getDate() + diffToMonday);
-  console.log(monday);
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diffToMonday + weekOffSet * 7);
+    monday.setHours(0, 0, 0, 0);
 
-  return (
-    <div>
-      <div className="flex justify-between m-1">
-        <button
-          onClick={() => {
-            decreaseWeek();
-          }}
-          className="border p-1 rounded"
-        >
-          Förra veckan
-        </button>
-        <h1 className="font-bold text-xl">Vecko Vy {currentWeek}</h1>
-        <button
-          onClick={() => {
-            increaseWeek();
-          }}
-          className="border p-1 rounded"
-        >
-          Nästa vecka
-        </button>
-      </div>
-      <div className="grid grid-cols-5 gap-2">
-        {days.map((day, index) => {
-            const currentDay = new Date(monday)
-            currentDay.setDate(monday.getDate()+ index)
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
 
-            return (
-                <div>
-                    <h2>{day}</h2>
-                    <p>{currentDay.toLocaleDateString("sv-SE")}</p>
-                </div>
-            )
-        })}
-      </div>
-    </div>
-  );
+    const thisWeeksBookings = bookings.filter((b) => {
+        const start = new Date(b.scheduleStartTime);
+        return start >= monday && start <= sunday;
+    });
+
+    const date = new Date(monday);
+    const oneJan = new Date(date.getFullYear(), 0, 1);
+    const numberOfDays = Math.floor((date - oneJan) / (24 * 60 * 60 * 1000));
+    const currentWeekNumber = Math.ceil(
+        (numberOfDays + oneJan.getDay() + 1) / 7
+    );
+
+    console.log(numberOfDays);
+
+    return (
+        <div className="grid gap-2">
+            <div className="flex justify-around">
+                <button
+                    onClick={() => setWeekOffSet((prev) => prev - 1)}
+                    className="border p-2 rounded">
+                    {" "}
+                    ← Föregående
+                </button>
+                <h1>Vecko vy {currentWeekNumber}</h1>
+                <button
+                    onClick={() => setWeekOffSet((prev) => prev + 1)}
+                    className="border p-2 rounded">
+                    Nästa →
+                </button>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+                {days.map((day, index) => {
+                    const currentDay = new Date(monday);
+                    currentDay.setDate(monday.getDate() + index);
+
+                    const dayBookings = thisWeeksBookings
+                        .filter(
+                            (b) =>
+                                new Date(b.scheduleStartTime).getDay() ===
+                                index + 1
+                        )
+                        .sort(
+                            (a, b) =>
+                                new Date(a.scheduleStartTime) -
+                                new Date(b.scheduleStartTime)
+                        );
+
+                    return (
+                        <DayColumn
+                            key={day}
+                            day={day}
+                            date={currentDay}
+                            bookings={dayBookings}
+                        />
+                    );
+                })}
+            </div>
+        </div>
+    );
 }
