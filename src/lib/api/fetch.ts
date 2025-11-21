@@ -1,7 +1,5 @@
 import { cookies } from "next/headers";
 
-// TODO: Denna får absolut inte vara på detta sätt när vi kör igång seriöst
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const baseUrl = process.env.API_URL;
 
 export async function fetchApi<T>(
