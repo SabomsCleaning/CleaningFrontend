@@ -41,8 +41,6 @@ export default function DashboardPage() {
         (numberOfDays + oneJan.getDay() + 1) / 7
     );
 
-    console.log(numberOfDays);
-
     return (
         <div className="grid gap-2">
             <div className="flex justify-around">

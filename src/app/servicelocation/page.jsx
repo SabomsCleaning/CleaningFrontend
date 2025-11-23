@@ -41,7 +41,6 @@ const ServiceLocation = () => {
         });
         const data = await response.json();
         getServiceLocation(selectedCustomerId);
-        console.log(data);
     };
 
     useEffect(() => {
