@@ -4,7 +4,7 @@ import { fetchApi} from "@/lib/api/fetch.ts"
 
 export async function getBookings() {
     try {
-        const res = await fetchApi("/booking")
+        const res = await fetchApi("/Booking")
         //console.log(res)
         return res;
     } catch (error) {

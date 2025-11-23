@@ -13,6 +13,7 @@ const BookingForm = () => {
   const [serviceLocation, setServiceLocation] = useState([]);
 
   const selectedCustomerId = watch("customerId");
+  const selectedLocation = watch("serviceLocationId");
 
   const getCustomers = async () => {
     const response = await fetch(`${baseURL}/Customer`);
@@ -30,6 +31,16 @@ const BookingForm = () => {
     const response = await fetch(`${baseURL}/ServiceLocation/${id}`);
     const data = await response.json();
     setServiceLocation(data);
+
+    setTimeout(() => {
+      const defaultLocation = data.find((loc) => loc.isDefault)
+      console.log(defaultLocation)
+      if(defaultLocation) {
+        setValue("serviceLocationId", defaultLocation.id)
+      } else {
+        setValue("serviceLocationId", "")
+      }
+    })
   };
 
   useEffect(() => {
@@ -109,7 +120,7 @@ const BookingForm = () => {
           </label>
           <select
             {...register("serviceLocationId", { required: true })}
-            defaultValue=""
+            value={selectedLocation || ""}
             disabled={!selectedCustomerId}
             className={`w-full p-2 rounded-lg border ${
               !selectedCustomerId
