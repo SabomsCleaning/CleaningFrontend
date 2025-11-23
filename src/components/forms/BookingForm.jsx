@@ -34,7 +34,6 @@ const BookingForm = () => {
 
     setTimeout(() => {
       const defaultLocation = data.find((loc) => loc.isDefault)
-      console.log(defaultLocation)
       if(defaultLocation) {
         setValue("serviceLocationId", defaultLocation.id)
       } else {
@@ -58,7 +57,7 @@ const BookingForm = () => {
     try {
       // Kombinera datum + tid
       const scheduleStartTime = `${data.bookingStartDate}T${data.bookingStartTime}`;
-      const scheduleEndTime = `${data.bookingEndDate}T${data.bookingEndTime}`;
+      const scheduleEndTime = `${data.bookingStartDate}T${data.bookingEndTime}`;
 
       const payload = {
         customerId: data.customerId,
@@ -160,53 +159,48 @@ const BookingForm = () => {
           </select>
         </div>
 
-        {/* Starttid */}
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Start datum & tid
-          </label>
+        {/* Datum + Tid i samma sektion */}
+<div className="space-y-2">
+  <label className="block text-sm font-medium text-gray-700">
+    Datum & tid för bokning
+  </label>
 
-          <div className="grid grid-cols-2 gap-3">
-            {/* Datum */}
-            <input
-              type="date"
-              {...register("bookingStartDate", { required: true })}
-              className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
+  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-inner space-y-3">
+    <div className="flex gap-3">
+      {/* Datum */}
+      <div className="flex flex-col flex-1">
+        <span className="text-xs text-gray-500 mb-1">Datum</span>
+        <input
+          type="date"
+          {...register("bookingStartDate", { required: true })}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
 
-            {/* Tid */}
-            <input
-              type="time"
-              step="600"
-              {...register("bookingStartTime", { required: true })}
-              className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </div>
+      {/* Starttid */}
+      <div className="flex flex-col flex-1">
+        <span className="text-xs text-gray-500 mb-1">Start</span>
+        <input
+          type="time"
+          step="600"
+          {...register("bookingStartTime", { required: true })}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
 
-        {/* Sluttid */}
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Slut datum & tid
-          </label>
-
-          <div className="grid grid-cols-2 gap-3">
-            {/* Datum */}
-            <input
-              type="date"
-              {...register("bookingEndDate", { required: true })}
-              className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
-
-            {/* Tid */}
-            <input
-              type="time"
-              step="600"
-              {...register("bookingEndTime", { required: true })}
-              className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </div>
+      {/* Sluttid */}
+      <div className="flex flex-col flex-1">
+        <span className="text-xs text-gray-500 mb-1">Slut</span>
+        <input
+          type="time"
+          step="600"
+          {...register("bookingEndTime", { required: true })}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Kommentar */}
         <div>
