@@ -3,7 +3,7 @@
 import { fetchApi } from "@/lib/api/fetch";
 
 export async function createBooking(payload) {
-  console.log("detta är i createBooking", payload);
+  //console.log("detta är i createBooking", payload);
   try {
     const result = await fetchApi("/Booking", {
       method: "POST",

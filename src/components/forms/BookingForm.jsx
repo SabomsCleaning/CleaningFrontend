@@ -6,7 +6,7 @@ import { createBooking } from "@/server/actions/booking/createBooking";
 
 const BookingForm = () => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  const { register, handleSubmit, setValue, watch } = useForm();
+  const { register, handleSubmit, setValue, watch, reset } = useForm();
 
   const [customers, setCustomers] = useState([]);
   const [serviceType, setServiceType] = useState([]);
@@ -65,6 +65,7 @@ const BookingForm = () => {
       }
 
       alert("Bokningen är skapad!");
+      reset();
     } catch (err) {
       alert(err.message || "Kunde inte skapa bokningen.");
     }

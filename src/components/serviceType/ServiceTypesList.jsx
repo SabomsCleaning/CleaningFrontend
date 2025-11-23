@@ -38,7 +38,7 @@ const ServiceTypesList = ({ serviceTypes }) => {
           {/* Info grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-700">
             <div>
-              <span className="font-medium text-gray-800">Pris:</span><br />
+              <span className="font-medium text-gray-800">Pris ink rut:</span><br />
               {s.basePrice ? `${s.basePrice} kr` : "-"}
             </div>
 
