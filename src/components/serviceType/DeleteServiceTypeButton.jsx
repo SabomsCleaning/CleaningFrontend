@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteServiceType } from "@/server/serviceType/serviceTypeApi";
+import { deleteServiceType } from "../../server/actions/serviceType/serviceTypeApi";
 import { useRouter } from "next/navigation";
 
 const DeleteServiceTypeButton = ({ id }) => {

@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { createServiceType } from "@/server/serviceType/serviceTypeApi";
+import { createServiceType } from "../../server/actions/serviceType/serviceTypeApi";
 
 const ServiceTypeForm = () => {
   const { register, handleSubmit, reset } = useForm();
