@@ -5,9 +5,9 @@ import ServiceTypeForm from "@/components/serviceType/ServiceTypeForm";
 export default async function ServiceTypePage() {
     const serviceTypes = await getServiceTypes();
     return (
-        <div>
-            <ServiceTypesList serviceTypes={serviceTypes}/>
+        <div className="flex">
             <ServiceTypeForm />
+            <ServiceTypesList serviceTypes={serviceTypes}/>
         </div>
     );
 }
