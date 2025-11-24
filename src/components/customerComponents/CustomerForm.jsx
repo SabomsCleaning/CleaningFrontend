@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
+export default function CustomerFormV2({ customer, setCustomer, setUpdateFlag }) {
   const emptyCustomer = {
     id: "",
     customerNumber: "",
@@ -32,191 +32,216 @@ const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
     defaultValues: emptyCustomer,
     shouldUnregister: true,
   });
-  const invoiceSameAsVisit = watch("invoiceSameAsVisit", true);
-  const addVisitAsServiceLocation = watch("addVisitAsServiceLocation", true);
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const invoiceSameAsVisit = watch("invoiceSameAsVisit");
+  const addVisitAsServiceLocation = watch("addVisitAsServiceLocation");
+
   const isUpdate = !!customer?.id;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const url = isUpdate
     ? `${baseUrl}/Customer/${customer.id}`
     : `${baseUrl}/Customer`;
 
   useEffect(() => {
     if (customer) reset(customer);
-    //else reset(emptyCustomer);
-  }, [customer, reset]);
+  }, [customer]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    const response = await fetch(`${url}`, {
-      method: isUpdate ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch(url, {
+        method: isUpdate ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    const result = await response.json();
-    console.log(result);
-    // just for update in customerList
-    emptyForm();
-    setUpdateFlag((prev) => !prev);
+      await response.json();
+
+      emptyForm();
+      setUpdateFlag((prev) => !prev);
+    } catch (err) {
+      alert("Kunde inte spara kunden");
+    }
   };
 
   const emptyForm = () => {
-    console.log("töm formulär");
     reset(emptyCustomer);
     unregister(["id", "customerNumber"]);
     setCustomer(null);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-      <div className="flex flex-col">
-        <div className="flex">
-          <input
-            className="input-glow w-full"
-            type="text"
-            {...register("firstName", {
-              required: "Förnamn måste fyllas i",
-            })}
-            placeholder="Förnamn"
-          />
-          {errors.firstName && (
-            <div className="text-red-500 mx-2">{errors.firstName.message}</div>
-          )}
-        </div>
-        <div className="flex">
-          <input
-            className="input-glow w-full"
-            type="text"
-            {...register("lastName", {
-              required: "Efternamn är obligatoriskt",
-            })}
-            placeholder="Efternamn"
-          />
-          {errors.lastName && (
-            <div className="text-red-500 mx-2">{errors.lastName.message}</div>
-          )}
-        </div>
-      </div>
-      <div className="flex">
-        <input
-          className="input-glow w-full"
-          type="text"
-          {...register("email")}
-          placeholder="Email"
-        />
-        <input
-          className="input-glow w-full"
-          type="text"
-          {...register("phoneNumber")}
-          placeholder="Telefon nummer"
-        />
-      </div>
-      <input
-        className="input-glow"
-        type="text"
-        {...register("visitAddressLine")}
-        placeholder="Besöks-address"
-      />
-      <div className="flex">
-        <input
-          className="input-glow w-full"
-          type="text"
-          {...register("visitCity")}
-          placeholder="Stad"
-        />
-        <input
-          className="input-glow w-full"
-          type="text"
-          {...register("visitPostalCode")}
-          placeholder="Postnummer"
-        />
-      </div>
-      <textarea
-        className="input-glow"
-        placeholder="Övrig info"
-        {...register("description", {})}
-      />
-      {!invoiceSameAsVisit && (
-        <div className="flex flex-col bg-blue-200">
-          <input
-            type="text"
-            {...register("invoiceAddressLine")}
-            placeholder="Faktura address"
-            className="input-glow"
-          />
-          <div className="flex w-full">
-            <input
-              type="text"
-              {...register("invoiceCity")}
-              placeholder="Stad"
-              className="input-glow w-full"
-            />
-            <input
-              type="text"
-              {...register("invoicePostalCode")}
-              placeholder="Postkod"
-              className="input-glow w-full"
-            />
-          </div>
-        </div>
-      )}
-      {!addVisitAsServiceLocation && (
-        <div className="flex flex-col bg-green-200">
-          <input
-            className="input-glow"
-            type="text"
-            {...register("serviceAddressLine")}
-            placeholder="Service-address"
-          />
-          <div className="flex">
-            <input
-              className="input-glow w-full"
-              type="text"
-              {...register("serviceCity")}
-              placeholder="Stad"
-            />
-            <input
-              className="input-glow w-full"
-              type="text"
-              {...register("servicePostalCode")}
-              placeholder="Postnummer"
-            />
-          </div>
-        </div>
-      )}
-      <label>
-        <input
-          type="checkbox"
-          {...register("invoiceSameAsVisit")}
-          className="m-1 gap-2"
-        />
-        Faktura address samma som besöksadress
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          {...register("addVisitAsServiceLocation")}
-          className="m-1 gap-2"
-        />
-        Serviceadress samma som besöksadress
-      </label>
-      <button type="submit" className="border-1 rounded-xl p-2 m-1">
-        {customer?.id ? "Uppdatera" : "Spara"}
-      </button>
-      <button
-        type="button"
-        className="border-1 rounded-xl p-2 m-1"
-        onClick={() => {
-          emptyForm();
-        }}
+    <div className="max-w-4xl px-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white shadow-md rounded-xl p-3 space-y-3 border border-gray-200"
       >
-        Töm formulär
-      </button>
-    </form>
-  );
-};
+        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          Kundinformation
+        </h2>
 
-export default CustomerForm;
+        {/* Kund info - 2 kolumner */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">Förnamn</label>
+            <input
+              className="w-full p-2 rounded-lg border border-gray-300"
+              type="text"
+              {...register("firstName", { required: true })}
+              placeholder="Förnamn"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">Efternamn</label>
+            <input
+              className="w-full p-2 rounded-lg border border-gray-300"
+              type="text"
+              {...register("lastName", { required: true })}
+              placeholder="Efternamn"
+            />
+          </div>
+        </div>
+
+        {/* Kontakt */}
+        <h3 className="text-lg font-semibold text-gray-700">Kontakt</h3>
+
+        <div className="bg-gray-50 border border-gray-200 rounded-xl shadow-inner p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-sm text-gray-700">Email</label>
+            <input
+              className="w-full p-2 rounded-lg border border-gray-300"
+              {...register("email")}
+              placeholder="Email"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm text-gray-700">Telefonnummer</label>
+            <input
+              className="w-full p-2 rounded-lg border border-gray-300"
+              {...register("phoneNumber")}
+              placeholder="Telefonnummer"
+            />
+          </div>
+        </div>
+
+        {/* Besöksadress */}
+        <h3 className="text-lg font-semibold text-gray-700">Besöksadress</h3>
+
+        <div className="bg-gray-50 border border-gray-200 rounded-xl shadow-inner p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            className="w-full p-2 rounded-lg border border-gray-300"
+            {...register("visitAddressLine")}
+            placeholder="Adress"
+          />
+
+          <input
+            className="w-full p-2 rounded-lg border border-gray-300"
+            {...register("visitCity")}
+            placeholder="Stad"
+          />
+
+          <input
+            className="w-full p-2 rounded-lg border border-gray-300"
+            {...register("visitPostalCode")}
+            placeholder="Postnummer"
+          />
+        </div>
+
+        {/* Checkboxar */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label className="flex items-center gap-2 text-gray-800">
+            <input type="checkbox" {...register("invoiceSameAsVisit")} />
+            Fakturaadress samma som besöksadress
+          </label>
+
+          <label className="flex items-center gap-2 text-gray-800">
+            <input type="checkbox" {...register("addVisitAsServiceLocation")} />
+            Serviceadress samma som besöksadress
+          </label>
+        </div>
+
+        {/* Fakturaadress */}
+        {!invoiceSameAsVisit && (
+          <>
+            <h3 className="text-lg font-semibold text-gray-700">
+              Fakturaadress
+            </h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl shadow-inner p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("invoiceAddressLine")}
+                placeholder="Adress"
+              />
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("invoiceCity")}
+                placeholder="Stad"
+              />
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("invoicePostalCode")}
+                placeholder="Postnummer"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Serviceadress */}
+        {!addVisitAsServiceLocation && (
+          <>
+            <h3 className="text-lg font-semibold text-gray-700">
+              Serviceadress
+            </h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl shadow-inner p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("serviceAddressLine")}
+                placeholder="Adress"
+              />
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("serviceCity")}
+                placeholder="Stad"
+              />
+              <input
+                className="w-full p-2 rounded-lg border border-gray-300"
+                {...register("servicePostalCode")}
+                placeholder="Postnummer"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Kommentar */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Kommentar</label>
+          <input
+            className="w-full p-2 rounded-lg border border-gray-300"
+            {...register("description")}
+            placeholder="Kommentar"
+          />
+        </div>
+
+        {/* Buttons */}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg"
+        >
+          {customer?.id ? "Uppdatera" : "Spara"}
+        </button>
+
+        <button
+          type="button"
+          onClick={emptyForm}
+          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg"
+        >
+          Töm formulär
+        </button>
+      </form>
+    </div>
+  );
+}
