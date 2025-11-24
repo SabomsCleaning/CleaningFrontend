@@ -18,7 +18,7 @@ const CustomerForm = ({ customer, setCustomer, setUpdateFlag }) => {
     invoicePostalCode: "",
     description: "",
     invoiceSameAsVisit: true,
-    addVisitAsServiceLocation: false,
+    addVisitAsServiceLocation: true,
   };
 
   const {
