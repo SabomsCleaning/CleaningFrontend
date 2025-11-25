@@ -31,7 +31,6 @@ export default function Modal({ booking, onClose }) {
       return;
     }
 
-    console.log("Min valda städare", selectedCleaner);
     const res = await assignCleaner({
       bookingId: booking.id,
       cleanerId: selectedCleaner,
