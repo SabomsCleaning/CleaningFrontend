@@ -9,7 +9,7 @@ const Navbar = () => {
         <Link className='text-purple-800' href="/servicelocation">Städplats</Link>
         <Link className='text-purple-800' href="/servicetype">Tjänst</Link>
         <Link className='text-purple-800' href="/booking">Bokning</Link>
-        <Link className='text-purple-800' href="/users">Användare</Link>
+        <Link className='text-purple-800' href="/users">Anställda</Link>
     </div>
   )
 }
