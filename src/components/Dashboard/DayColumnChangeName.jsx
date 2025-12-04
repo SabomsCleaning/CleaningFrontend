@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Modal from "@/components/dashboard/Modal";
+import Modal from "@/components/Dashboard/Modal";
 
 export default function DayColumnChangeName({ day, date, bookings }) {
     const [isMounted, setIsMounted] = useState(false);
