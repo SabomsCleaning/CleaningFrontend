@@ -1,5 +1,5 @@
 "use client";
-import { getCleaners } from "@/server/actions/cleaner/getCleaners";
+import { GetUsers } from "@/server/actions/user/GetUsers";
 import { assignCleaner } from "@/server/actions/cleaner/assignCleaner";
 import { useEffect, useState } from "react";
 
@@ -19,7 +19,7 @@ export default function Modal({ booking, onClose }) {
   // Hämta cleaners
   useEffect(() => {
     (async () => {
-      const data = await getCleaners();
+      const data = await getUsers();
       setCleaners(data.data);
     })();
   }, []);

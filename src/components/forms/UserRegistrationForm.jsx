@@ -1,32 +1,33 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { CreateUser } from "@/server/actions/user/CreateUser"
+import { CreateUser } from "@/server/actions/user/CreateUser";
 
 const UserForm = () => {
-    const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { register, handleSubmit } = useForm();
 
     const registerUser = async (data) => {
-      try {
-        const payload = {
-          email: data.email,
-          password: data.password,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          phone: data.phone,
-          role: data.role,
-          department: data.department
-        }
-        console.log(data);
-        const response = await CreateUser(payload);
+        try {
+            const payload = {
+                email: data.email,
+                password: data.password,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phone: data.phone,
+                role: data.role,
+                department: data.department,
+            };
+            console.log(data);
+            const response = await CreateUser(payload);
 
-        if (!response.success) {
-          throw new Error(response.message || "Kunde inte skapa en användare")
+            if (!response.success) {
+                throw new Error(
+                    response.message || "Kunde inte skapa en användare"
+                );
+            }
+        } catch (error) {
+            console.error("Felet i registerform: ", error);
         }
-      } catch (error) {
-        console.error("Felet i registerform: ",  error)
-      }
-    }
+    };
     return (
         <div>
             <form onSubmit={handleSubmit(registerUser)}>
@@ -84,8 +85,6 @@ const UserForm = () => {
 };
 
 export default UserForm;
-
-
 
 // {
 //   "email": "string",
