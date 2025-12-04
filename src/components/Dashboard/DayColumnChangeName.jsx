@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "@/components/dashboard/Modal";
 
-export default function DayColumn({ day, date, bookings }) {
+export default function DayColumnChangeName({ day, date, bookings }) {
     const [isMounted, setIsMounted] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
 
