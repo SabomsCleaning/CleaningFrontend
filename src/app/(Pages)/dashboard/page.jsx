@@ -75,7 +75,7 @@ export default function DashboardPage() {
                         );
 
                     return (
-                        <DayColumn
+                        <DayColumnChangeName
                             key={day}
                             day={day}
                             date={currentDay}
