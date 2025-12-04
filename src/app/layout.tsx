@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import UserInfo from "@/components/navigation/userInfo";
+import UserInfo from "@/components/navigation/UserInfoBar";
 
 export const metadata: Metadata = {
     title: "Create Next App",

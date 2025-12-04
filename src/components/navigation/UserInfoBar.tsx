@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import LogoutButton from "./LogoutButtonTest";
+import LogoutButton from "./ButtonLogout";
 import Navbar from "@/components/navigation/Navbar";
 
 interface JwtPayload {
