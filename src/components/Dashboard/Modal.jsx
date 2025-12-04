@@ -1,6 +1,6 @@
 "use client";
 import { GetUsers } from "@/server/actions/user/GetUsers";
-import { assignCleaner } from "@/server/actions/cleaner/assignCleaner";
+import { AssignUser } from "@/server/actions/user/AssignUserToBooking";
 import { useEffect, useState } from "react";
 
 export default function Modal({ booking, onClose }) {
@@ -19,7 +19,7 @@ export default function Modal({ booking, onClose }) {
   // Hämta cleaners
   useEffect(() => {
     (async () => {
-      const data = await getUsers();
+      const data = await GetUsers();
       setCleaners(data.data);
     })();
   }, []);
@@ -31,7 +31,7 @@ export default function Modal({ booking, onClose }) {
       return;
     }
 
-    const res = await assignCleaner({
+    const res = await AssignUser({
       bookingId: booking.id,
       cleanerId: selectedCleaner,
     });

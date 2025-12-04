@@ -2,7 +2,7 @@
 
 import { fetchApi } from "@/lib/api/fetch";
 
-export async function assignCleaner(payload) {
+export async function AssignUser(payload) {
   console.log("assignCleaner payload:", payload);
 
   const { bookingId, cleanerId } = payload;
