@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getBookings } from "@/server/actions/booking/getBookings";
-import DayColumn from "@/components/Dashboard/DayColumn";
+import DayColumn from "@/components/dashboard/DayColumn";
 
 export default function DashboardPage() {
     const [bookings, setBookings] = useState([]);

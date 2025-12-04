@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import LogoutButton from "./logoutButton";
-import Navbar from "@/components/Navbar";
+import LogoutButton from "./LogoutButtonTest";
+import Navbar from "@/components/navigation/Navbar";
 
 interface JwtPayload {
     Role?: string;
@@ -36,8 +36,8 @@ export default async function UserInfo() {
                     </p>
                 </div>
                 <div className="flex justify-between items-center">
-                <Navbar />
-                <LogoutButton />
+                    <Navbar />
+                    <LogoutButton />
                 </div>
             </div>
         );
