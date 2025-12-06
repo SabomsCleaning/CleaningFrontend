@@ -2,10 +2,6 @@
 
 import { fetchApi } from "@/lib/api/fetch";
 
-// export async function getServiceTypes() {
-//     return fetchApi("/ServiceType");
-// }
-
 export async function getServiceTypes() {
     const result = await fetchApi("/ServiceType");
     return result.data;

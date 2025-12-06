@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getBookings } from "@/server/actions/booking/getBookings";
-import DayColumn from "@/components/dashboard/DayColumn";
+import DayColumnChangeName from "@/components/Dashboard/DayColumnChangeName";
 
 export default function DashboardPage() {
     const [bookings, setBookings] = useState([]);
@@ -75,7 +75,7 @@ export default function DashboardPage() {
                         );
 
                     return (
-                        <DayColumn
+                        <DayColumnChangeName
                             key={day}
                             day={day}
                             date={currentDay}

@@ -15,8 +15,8 @@ export async function fetchApi<T>(
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
 
-    const fullUrl = `${baseUrl}${endpoint}`;
-    console.log("Anropar API:", fullUrl);
+    //const fullUrl = `${baseUrl}${endpoint}`;
+    //console.log("Anropar API:", fullUrl);
 
     try {
         const res = await fetch(`${baseUrl}${endpoint}`, {
