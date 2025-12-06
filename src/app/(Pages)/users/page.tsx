@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import UserForm from "@/components/users/UserRegistrationForm";
 import UserList from "@/components/users/UserList"
 import React from "react";
