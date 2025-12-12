@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/server/actions/serviceType/ServiceTypeAction.js", "src/app/(Pages)/dashboard/page.jsx", "src/server/actions/booking/createBooking.js", "src/components/users/UserRegistrationForm.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/server/actions/serviceType/ServiceTypeAction.js", "src/app/(Pages)/dashboard/page.jsx", "src/server/actions/booking/createBooking.js", "src/components/users/UserRegistrationForm.jsx", "src/server/actions/user/RemoveCleaner.js"],
   "exclude": ["node_modules"]
 }
